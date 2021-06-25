@@ -188,6 +188,13 @@ public class HandCalculator {
            
     }
     
+    static boolean isFullHouse(ArrayList<Card> c)
+    {
+        
+        
+        return isPair(c) && isThree(c);
+    }
+    
 }
 
 

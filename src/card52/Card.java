@@ -17,6 +17,7 @@ public class Card implements Comparable<Card> {
     private int rank;
     private Suit suit;
     
+    public final int MAX_RANK = 14;
     
     public Card(int r, Suit s)
     {

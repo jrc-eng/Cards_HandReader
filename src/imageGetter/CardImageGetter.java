@@ -47,7 +47,7 @@ public class CardImageGetter {
         
     }
     
-    static String getStringFromCard(Card c)
+    public static String getStringFromCard(Card c)
     {
         int rank = c.getRank();
         

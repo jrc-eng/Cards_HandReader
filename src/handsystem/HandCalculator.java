@@ -16,27 +16,54 @@ import java.util.Comparator;
  * @author jrcro
  */
 public class HandCalculator {
-    public final double HIGH_VALUE = 0f;
-    public final double PAIR_VALUE = 1f;
-    public final double TWO_PAIR_VALUE = 2f;
-    public final double THREE_VALUE = 3f;
-    public final double STRAIGHT_VALUE = 4f;
-    public final double FLUSH_VALUE = 5f;
-    public final double FULLHOUSE_VALUE = 6f;
-    public final double FOUR_VALUE = 7f;
-    public final double STRAIGHTFLUSH_VALUE = 8f;
     
-    public double calculateHandValue(ArrayList<Card> c)
+    
+    public static HandEnum calculateHandValue(ArrayList<Card> c)
     {
         //Assume that all hands from now on are sorted beforehand, which makes our job easier.
-        ArrayList<Card> sortedHand = sortCardArray(c);
+        ArrayList<Card> sortedHand = sortCardArray(new ArrayList<Card>(c));
         
-        double val = 0;
+        for (int x = 0 ; x < sortedHand.size() ; x++)
+        {
+            System.out.println(sortedHand.get(x));
+        }
+        
+        HandEnum val = HandEnum.HIGH;
+        
+        if(isFive(c))
+        {
+            return HandEnum.FIVE;
+        }
+        
+        if(isStraightFlush(c))
+        {
+            return HandEnum.STRAIGHT_FLUSH;
+        }
+        
+        if(isFlush(c))
+        {
+            return HandEnum.FLUSH;
+        }
+        
+        if(isStraight(c))
+        {
+            return HandEnum.STRAIGHT;
+        }
+        
+        if(isThree(c))
+        {
+            return HandEnum.THREE;
+        }
+        
+        if(isPair(c))
+        {
+            return HandEnum.PAIR;
+        }
         
         return val;
     }
     
-    ArrayList<Card> sortCardArray(ArrayList<Card> c)
+    static ArrayList<Card> sortCardArray(ArrayList<Card> c)
     {
         
         
@@ -55,7 +82,7 @@ public class HandCalculator {
      * @param c
      * @return 
      */
-    boolean isStraight(ArrayList<Card> c)
+    static boolean isStraight(ArrayList<Card> c)
     {
         for(int x = 0 ; x < c.size()-1 ; x++)
         {
@@ -77,7 +104,7 @@ public class HandCalculator {
      * @param c
      * @return 
      */
-    boolean isFlush(ArrayList<Card> c)
+    static boolean isFlush(ArrayList<Card> c)
     {
         Suit currentSuit = c.get(0).getSuit();
         
@@ -92,13 +119,77 @@ public class HandCalculator {
         return true;
     }
     
-    boolean isStraightFlush(ArrayList<Card> c)
+    static boolean isStraightFlush(ArrayList<Card> c)
     {
         return(isFlush(c) && isStraight(c));
     }
     
     
+    static boolean isFive(ArrayList<Card> c)
+    {
+        int firstRank = c.get(0).getRank();
+        
+        for(int x = 1 ; x < Hand.HAND_LENGTH ; x++)
+        {
+            if(c.get(x).getRank() != firstRank)
+            {
+                return false;
+            }
+        }
+        
+        return true;
+        
+    }
+
+    static boolean isPair(ArrayList<Card> c)
+    {
+        for (int x = 0 ; x < Hand.HAND_LENGTH-1 ; x++)
+        {
+            if(x < Hand.HAND_LENGTH - 2)
+            {
+                if(c.get(x).getRank() == c.get(x+1).getRank() && c.get(x+1).getRank() != c.get(x+2).getRank())
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                if(c.get(x).getRank() == c.get(x+1).getRank())
+                {
+                    return true;
+                }
+            }
+        }
+          
+        return false;
+    }
+    
+    static boolean isThree(ArrayList<Card> c)
+    {
+        for (int x = 0 ; x < Hand.HAND_LENGTH-2 ; x++)
+        {
+            if(x < Hand.HAND_LENGTH - 3)
+            {
+                if(c.get(x).getRank() == c.get(x+1).getRank() && c.get(x+1).getRank() == c.get(x+2).getRank() && c.get(x+2).getRank() != c.get(x+3).getRank())
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                if(c.get(x).getRank() == c.get(x+1).getRank() && c.get(x).getRank() == c.get(x+2).getRank())
+                {
+                    return true;
+                }
+            }
+        }
+          
+        return false; 
+           
+    }
+    
 }
+
 
 
 class CardComparator implements Comparator<Card> {

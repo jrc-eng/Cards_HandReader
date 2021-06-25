@@ -9,6 +9,8 @@ import card52.Card;
 import card52.Suit;
 import handsystem.Hand;
 import static handsystem.Hand.HAND_LENGTH;
+import handsystem.HandCalculator;
+import handsystem.HandEnum;
 import imageGetter.CardImageGetter;
 import java.io.File;
 import java.util.ArrayList;
@@ -19,6 +21,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
@@ -39,6 +43,8 @@ public class Cards_HandReader extends Application {
     Button r1, r2, r3, r4, r5;
     
     Button s1, s2, s3, s4, s5;
+    
+    Label handValue;
     
     GridPane root;
     private int MAX_RANK;
@@ -65,8 +71,8 @@ public class Cards_HandReader extends Application {
         root.setPadding(new Insets(10,10,10,10));
         root.setAlignment(Pos.CENTER);
         
-        root.setHgap(8);
-        root.setVgap(8);
+        root.setHgap(20);
+        root.setVgap(20);
        
         ArrayList<Card> cards = hand.getCardHand();
         
@@ -81,10 +87,8 @@ public class Cards_HandReader extends Application {
         root.add(i3,2,0);
         root.add(i4,3,0);
         root.add(i5,4,0);
-        
-        
+               
         r1 = new Button("Rank");
-        
         s1 = new Button("Suit");
         
         r1.setOnAction((e) ->{
@@ -96,22 +100,83 @@ public class Cards_HandReader extends Application {
         
             changeCardSuit(0);
         });
-
-        
+       
         root.add(r1, 0,1);
         root.add(s1, 0,2);
+        r2 = new Button("Rank");
+        s2 = new Button("Suit");
         
+        r2.setOnAction((e) ->{
+            
+            changeCardRank(1);
+        });       
+        s2.setOnAction((e) ->{
+        
+            changeCardSuit(1);
+        });
+        root.add(r2, 1,1);
+        root.add(s2, 1,2);
+
+        r3 = new Button("Rank");
+        s3 = new Button("Suit");
+        
+        r3.setOnAction((e) ->{
+            
+            changeCardRank(2);
+        });       
+        s3.setOnAction((e) ->{
+        
+            changeCardSuit(2);
+        });
+        root.add(r3, 2,1);
+        root.add(s3, 2,2);   
+        
+        r4 = new Button("Rank");
+        s4 = new Button("Suit");
+        
+        r4.setOnAction((e) ->{
+            
+            changeCardRank(3);
+        });       
+        s4.setOnAction((e) ->{
+        
+            changeCardSuit(3);
+        });
+        root.add(r4, 3,1);
+        root.add(s4, 3,2);  
+        
+        r5 = new Button("Rank");
+        s5 = new Button("Suit");
+        
+        r5.setOnAction((e) ->{
+            
+            changeCardRank(4);
+        });       
+        s5.setOnAction((e) ->{
+        
+            changeCardSuit(4);
+        });
+        root.add(r5, 4,1);
+        root.add(s5, 4,2);  
         //new ImageView(new File(CardImageGetter.getStringFromCard(cards.get(x))).toURI().toString());
         
         
         
+        /*
+            And Finally, we make code for the display of the Hand Value itself:
+        */
+        Label handHeader = new Label("Hand Value:");
+        root.add(handHeader, 5,0);
         
+        
+        handValue = new Label("Straight");
+        root.add(handValue, 5,1);
         
         //root.getChildren().add(new Button("Ok"));
         
         //root.getChildren().add(btn);
         
-        Scene scene = new Scene(root,330,280);
+        Scene scene = new Scene(root,400,280);
         
         primaryStage.setTitle("Card Hand Reader");
         primaryStage.setScene(scene);
@@ -146,6 +211,7 @@ public class Cards_HandReader extends Application {
         
         hand.setCardAtPos(c, cardPos);
         renderImages();
+        getHandValue(hand.getCardHand());
     }
     
     public void changeCardSuit(int cardPos)
@@ -175,6 +241,8 @@ public class Cards_HandReader extends Application {
         hand.setCardAtPos(c, cardPos);
         
         renderImages();
+        
+        getHandValue(hand.getCardHand());
     }
     
     public void renderImages()
@@ -191,4 +259,14 @@ public class Cards_HandReader extends Application {
     }
     
     
+    public void getHandValue(ArrayList<Card> c)
+    {
+        HandEnum value = HandCalculator.calculateHandValue(c);
+        
+        System.out.println(value);
+        
+        handValue.setText("X");
+        
+        
+    }
 }

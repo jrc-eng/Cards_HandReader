@@ -12,12 +12,28 @@ import java.util.Collections;
 import java.util.Comparator;
 
 /**
+ * HandCalculator
+ * 
+ * Calculates the value of Hands.
+ * 
+ * Use the Method: calculateHandValue to get the value of a Hand.
+ * Results may vary when using a card hand of less than 5 cards.
+ * 
  *
- * @author jrcro
+ * @author jrc-eng
  */
 public class HandCalculator {
     
-    
+    /**
+     * calculateHandValue
+     * 
+     * Given an ArrayList of Cards, c, returns a HandEnum value for the value of the hand.
+     * Does NOT perform tiebreaker functions such as Kicker values.
+     * 
+     * 
+     * @param c
+     * @return 
+     */
     public static HandEnum calculateHandValue(ArrayList<Card> c)
     {
         //Assume that all hands from now on are sorted beforehand, which makes our job easier.
@@ -30,32 +46,47 @@ public class HandCalculator {
         
         HandEnum val = HandEnum.HIGH;
         
-        if(isFive(c))
+        if(isFive(sortedHand))
         {
             return HandEnum.FIVE;
         }
         
-        if(isStraightFlush(c))
+        if(isStraightFlush(sortedHand))
         {
             return HandEnum.STRAIGHT_FLUSH;
         }
         
-        if(isFlush(c))
+        if(isFour(sortedHand))
+        {
+            return HandEnum.FOUR;
+        }
+        
+        if(isFullHouse(sortedHand))
+        {
+            return HandEnum.FULL_HOUSE;
+        }
+        
+        if(isFlush(sortedHand))
         {
             return HandEnum.FLUSH;
         }
         
-        if(isStraight(c))
+        if(isStraight(sortedHand))
         {
             return HandEnum.STRAIGHT;
         }
         
-        if(isThree(c))
+        if(isThree(sortedHand))
         {
             return HandEnum.THREE;
         }
         
-        if(isPair(c))
+        if(isTwoPair(sortedHand))
+        {
+            return HandEnum.TWO_PAIR;
+        }
+        
+        if(isPair(sortedHand))
         {
             return HandEnum.PAIR;
         }
@@ -63,6 +94,15 @@ public class HandCalculator {
         return val;
     }
     
+    /**
+     * sortCardArray
+     * 
+     * Sorts an ArrayList of Cards and returns the arraylist back.
+     * 
+     * 
+     * @param c
+     * @return 
+     */
     static ArrayList<Card> sortCardArray(ArrayList<Card> c)
     {
         
@@ -77,6 +117,8 @@ public class HandCalculator {
      * 
      * Check if the Hand is a Straight by making sure all rank values are in order.
      * 
+     * For example, A-2-3-4-5 is a Straight.  The Suits can be anything.
+     * 
      * DISCLAIMER:  The ArrayList should be sorted in ORDER for this to work.
      * 
      * @param c
@@ -84,6 +126,10 @@ public class HandCalculator {
      */
     static boolean isStraight(ArrayList<Card> c)
     {
+        if(c.size() < 5)
+        {
+            return false;
+        }
         for(int x = 0 ; x < c.size()-1 ; x++)
         {
            if(c.get(x).getRank() != c.get(x).getRank() - 1)
@@ -97,7 +143,6 @@ public class HandCalculator {
     
     /**
      * isFlush
-     * 
      * 
      * returns TRUE if all values equal the same suit.
      * 
@@ -119,6 +164,15 @@ public class HandCalculator {
         return true;
     }
     
+    /**
+     * isStraightFlush
+     * 
+     * Checks if an ArrayList of Cards is both a Flush and a Straight
+     * 
+     * 
+     * @param c
+     * @return 
+     */
     static boolean isStraightFlush(ArrayList<Card> c)
     {
         return(isFlush(c) && isStraight(c));
@@ -139,6 +193,42 @@ public class HandCalculator {
         
         return true;
         
+    }
+    
+    static boolean isTwoPair(ArrayList<Card> c)
+    {
+        int pairsComplete = 0;
+        int firstPairRank = 0;
+        
+        for (int x = 0 ; x < Hand.HAND_LENGTH-1 ; x++)
+        {
+            //Check if we have a winner.
+            if(x < Hand.HAND_LENGTH - 2)
+            {
+                if(c.get(x).getRank() == c.get(x+1).getRank() && c.get(x+1).getRank() != c.get(x+2).getRank() && firstPairRank != c.get(x).getRank())
+                {
+                    pairsComplete++;
+                    firstPairRank = c.get(x).getRank();
+                }
+            }
+            else
+            {
+                if(c.get(x).getRank() == c.get(x+1).getRank() && c.get(x).getRank() != firstPairRank)
+                {
+                    pairsComplete++;
+                    firstPairRank = c.get(x).getRank();
+                }
+            }
+            
+            if(pairsComplete == 2)
+            {
+                return true;
+            }
+            
+            
+        }
+          
+        return false;
     }
 
     static boolean isPair(ArrayList<Card> c)
@@ -166,6 +256,11 @@ public class HandCalculator {
     
     static boolean isThree(ArrayList<Card> c)
     {
+        if(c.size() < 3)
+        {
+            return false;
+        }
+        
         for (int x = 0 ; x < Hand.HAND_LENGTH-2 ; x++)
         {
             if(x < Hand.HAND_LENGTH - 3)
@@ -190,12 +285,61 @@ public class HandCalculator {
     
     static boolean isFullHouse(ArrayList<Card> c)
     {
+        boolean pairFound = false, tripletFound = false;
         
+        for (int x = 0 ; x < c.size() ; x++)
+        {
+            if(!tripletFound && x < c.size()-2)
+            {
+                if(c.get(x).getRank() == c.get(x+1).getRank() && c.get(x+1).getRank() == c.get(x+2).getRank())
+                {
+                    tripletFound = true;
+                    x = x+1;
+                }
+            }
+            else if(!pairFound && x < c.size()-1)
+            {
+                if(c.get(x).getRank() == c.get(x+1).getRank())
+                {
+                    pairFound = true;
+                    
+                }
+            }           
+            
+        }
         
-        return isPair(c) && isThree(c);
+        return tripletFound && pairFound;
     }
     
+    /**
+     * isFour
+     * 
+     * Returns true if at least four cards are of the same rank.
+     * 
+     * Returns false otherwise, or if the parameter c is not four cards long.
+     * 
+     * @param c
+     * @return 
+     */
+    static boolean isFour(ArrayList<Card> c)
+    {
+        if(c.size() < 4)
+        {
+            return false;
+        }
+        
+        for(int x = 0 ; x < c.size() - 3 ; x++)
+        {
+            if(c.get(x).getRank() == c.get(x+1).getRank() && c.get(x+1).getRank() == c.get(x+2).getRank() && c.get(x+2).getRank() == c.get(x+3).getRank())
+            {
+                return true;
+            }
+        } 
+        return false;
+    }
 }
+
+
 
 
 

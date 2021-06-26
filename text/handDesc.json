@@ -1,0 +1,19 @@
+{
+    "author": "j",
+    
+    "handList": [
+    
+    {"name": "High Card", "desc" : "Junk Hand.  Matches no values.  Value is determined by the highest ranking card of the hand."},
+    {"name":"Pair", "desc" : "One Pair of two cards that match rank."},
+    {"name":"Two Pair", "desc" : "One Pair of two cards that match rank."},
+    {"name":"Three of a Kind", "desc" : "One Pair of two cards that match rank."},
+    {"name":"Straight", "desc" : "One Pair of two cards that match rank."},
+    {"name":"Flush", "desc" : "One Pair of two cards that match rank."},
+    {"name":"Full House", "desc" : "One Pair of two cards that match rank."},
+    {"name":"Four of a Kind", "desc" : "One Pair of two cards that match rank."},
+    {"name":"Straight Flush", "desc" : "One Pair of two cards that match rank."},
+    {"name":"Five of a Kind", "desc" : "One Pair of two cards that match rank."}
+    
+    
+    ]
+}

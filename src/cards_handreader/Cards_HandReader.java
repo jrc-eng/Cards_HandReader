@@ -265,8 +265,54 @@ public class Cards_HandReader extends Application {
         
         System.out.println(value);
         
-        handValue.setText("X");
+        String newValue = "High Card";
         
+        
+        
+        changeHandValueText(value);
+        
+        
+    }
+    
+    public void changeHandValueText(HandEnum val)
+    {
+        String v = "High Card";
+        
+        switch(val)
+        {
+            case PAIR:
+                v = "Pair";
+                break;
+            case TWO_PAIR:
+                v = "Two Pair";
+                break;
+            case THREE:
+                v = "Three of a Kind";                
+            break;
+            case STRAIGHT:
+                v = "Straight";
+            break;
+            case FLUSH:
+                v = "Flush";
+            break;
+            case FULL_HOUSE:
+                v = "Full House";
+            break;
+            case FOUR:
+                v = "Four of a Kind";
+            case STRAIGHT_FLUSH:
+                v = "Straight Flush";
+            break;
+            case FIVE:
+                v = "Five of a Kind";
+            break;
+        
+        
+        }
+        
+        
+        
+        handValue.setText(v);
         
     }
 }

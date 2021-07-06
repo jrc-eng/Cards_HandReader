@@ -132,7 +132,10 @@ public class HandCalculator {
         }
         for(int x = 0 ; x < c.size()-1 ; x++)
         {
-           if(c.get(x).getRank() != c.get(x).getRank() - 1)
+            int rank1 = c.get(x).getRank();
+            int rank2 = c.get(x+1).getRank();
+            
+           if(rank1 != rank2 - 1)
            {
                return false;
            }
@@ -283,32 +286,60 @@ public class HandCalculator {
            
     }
     
+    /**
+     * isFullHouse
+     * 
+     * Checks if the hand is a full house.
+     * 
+     * Full House:
+     * Contains a Three of a Kind and a Pair, they do not share ranks with each other.
+     * 
+     * 
+     * @param c
+     * @return 
+     */
     static boolean isFullHouse(ArrayList<Card> c)
     {
-        boolean pairFound = false, tripletFound = false;
-        
-        for (int x = 0 ; x < c.size() ; x++)
+        //Awkward way.  If it's not five, we'll just not check at all.
+        if(c.size() != 5)
         {
-            if(!tripletFound && x < c.size()-2)
-            {
-                if(c.get(x).getRank() == c.get(x+1).getRank() && c.get(x+1).getRank() == c.get(x+2).getRank())
-                {
-                    tripletFound = true;
-                    x = x+1;
-                }
-            }
-            else if(!pairFound && x < c.size()-1)
-            {
-                if(c.get(x).getRank() == c.get(x+1).getRank())
-                {
-                    pairFound = true;
-                    
-                }
-            }           
-            
+            return false;
         }
         
-        return tripletFound && pairFound;
+        boolean tripFound = false, pairFound = false;
+        int firstRank = 0;
+        
+        //Check for triplet cards.
+        for (int x = 0 ; x < c.size()-2 && tripFound == false ; x++)
+        {
+            Card card1 = c.get(x);
+            Card card2 = c.get(x+1);
+            Card card3 = c.get(x+2);
+            if(card1.getRank() == card2.getRank() && card1.getRank() == card3.getRank())
+            {
+                tripFound = true;
+                firstRank = card1.getRank();
+                break;
+            }
+        }
+        if(tripFound == false)
+        {
+            return false;
+        }
+        
+        for (int x = 0 ; x < c.size()-1 ; x++)
+        {
+            Card card1 = c.get(x);
+            Card card2 = c.get(x+1);
+            
+            //We found a pair after finding triplets.  Mission success.  Full House identified.
+            if(card1.getRank() != firstRank && card1.getRank() == card2.getRank())
+            {
+                return true;
+            }
+        }
+        
+        return false;
     }
     
     /**

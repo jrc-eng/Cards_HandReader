@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BOOKLIST.XML
+
+Generated March 2, 2021.
+By Jack Crowley
+-->
+
+<!--
+    How the bookList works:
+    
+    Each <book> in bookList has to have the following information:
+    
+    id: Individial ID for the book
+    title: Book's title
+    author: Name of author.
+    Price: Double with two decimal places
+    Cover: Link to cover image.
+
+
+-->
+
+<entries>
+    <book>
+        <id>0</id>
+        <name>High Card</name>
+        <desc>The weakest hand in the game.  The hand does not qualify as any other hand.  In the event of a tie, its value is its highest card.</desc>
+        
+        
+        
+    </book>
+
+    
+</entries>

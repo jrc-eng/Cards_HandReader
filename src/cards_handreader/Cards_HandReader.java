@@ -176,7 +176,7 @@ public class Cards_HandReader extends Application {
         
         //root.getChildren().add(btn);
         
-        Scene scene = new Scene(root,400,280);
+        Scene scene = new Scene(root,440,280);
         
         primaryStage.setTitle("Card Hand Reader");
         primaryStage.setScene(scene);
